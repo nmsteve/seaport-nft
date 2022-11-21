@@ -202,6 +202,7 @@ export const sign = async () => {
 
     });
 
+    await ethereum.request({ method: 'eth_requestAccounts' })
 
     const response = await ethereum.request({
         method: 'eth_signTypedData_v4',
