@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers, Signer } from "ethers";
 import { SEAPORT_INTERFACE } from './seaportInterface'
 var Web3 = require('web3');
 
@@ -9,6 +9,7 @@ let provider = ethers.providers.getDefaultProvider(process.env.REACT_APP_POLYGON
 var web3 = new Web3(Web3.givenProvider || process.env.REACT_APP_POLYGON_MUMBAI_ALCHEM);
 let seaport = new ethers.Contract(SEAPORT_ADDR, SEAPORT_INTERFACE, provider)
 
+const { ethereum } = window;
 
 
 export const getName = async () => {
@@ -200,33 +201,14 @@ export const sign = async () => {
         },
 
     });
-    var from = await web3.eth.getAccounts();
 
-    var params = [from[0], msgParams];
-    var method = 'eth_signTypedData_v4';
 
-    var signature
+    const response = await ethereum.request({
+        method: 'eth_signTypedData_v4',
+        params: [ethereum.selectedAddress, msgParams]
+    });
 
-    await web3.currentProvider.sendAsync(
-        {
-            method,
-            params,
-            from: from[0],
-        },
-        function (err, result) {
-            if (err) return console.dir(err);
-            if (result.error) {
-                alert(result.error.message);
-            }
-            if (result.error) return console.error('ERROR', result);
-
-            console.log('TYPED SIGNED:' + JSON.stringify(result.result));
-            signature = `TYPED SIGNED:${JSON.stringify(result.result)}`
-            alert(signature)
-        }
-    );
-
-    return signature
+    return response
 }
 
 
