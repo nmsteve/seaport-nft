@@ -1,12 +1,13 @@
 
 import { useState } from 'react';
 import { getName, sign } from './seaport'
-
+import { createOrder } from "./seaport-js"
 
 function App() {
 
   const [name, setName] = useState('')
   const [signature, setSign] = useState('')
+  const [order, setOrder] = useState()
 
   const displayName = async () => {
     setName('')
@@ -16,8 +17,14 @@ function App() {
 
   const displaySign = async () => {
     setSign('')
-    setSign(await sign())
+    await setSign(await sign())
     console.log(signature)
+  }
+
+  const displayOrder = async () => {
+    setOrder('')
+    setOrder(await createOrder())
+
   }
 
   return (
@@ -32,7 +39,7 @@ function App() {
       </div>
       <div className='d-flex align-items-center mt-3'>
         <button className='className="btn bg-success rounded-2 py-0 w-md  d-none d-md-inline'
-          onClick={displaySign}>sign</button>
+          onClick={displayOrder}>sign</button>
         <p className='ms-2'>{signature}</p>
       </div>
 

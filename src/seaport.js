@@ -11,13 +11,6 @@ let seaport = new ethers.Contract(SEAPORT_ADDR, SEAPORT_INTERFACE, provider)
 
 const { ethereum } = window;
 
-
-export const getName = async () => {
-    let name = await seaport.name()
-    console.log(name)
-    return name
-
-}
 // BasicOrderParameters = {
 //     considerationToken: '0x0000000000000000000000000000000000000000',
 //     considerationIdentifier: 0,
@@ -53,6 +46,13 @@ export const getName = async () => {
 //     let signature = await signer._signTypedData(domain, orderType, orderValues);
 //     console.log(signature)
 // }
+
+export const getName = async () => {
+    let name = await seaport.name()
+    console.log(name)
+    return name
+
+}
 
 export const sign = async () => {
     // const msgParams = JSON.stringify({
@@ -127,13 +127,13 @@ export const sign = async () => {
     const msgParams = JSON.stringify({
         domain: {
             // Defining the chain aka Rinkeby testnet or Ethereum Main Net
-            chainId: 80001,
-            // Give a user friendly name to the specific contract you are signing for.
-            name: 'Sea Port',
-            // If name isn't enough add verifying contract to make sure you are establishing contracts with the proper entity
-            verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
-            // Just let's you know the latest version. Definitely make sure the field name is correct.
-            version: '1',
+            // chainId: await ethereum.request({ method: 'eth_chainId' }),
+            // // Give a user friendly name to the specific contract you are signing for.
+            // name: 'Sea Port',
+            // // If name isn't enough add verifying contract to make sure you are establishing contracts with the proper entity
+            // verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+            // // Just let's you know the latest version. Definitely make sure the field name is correct.
+            // version: '1',
         },
         // Defining the message signing data content.
         message: {
@@ -145,25 +145,33 @@ export const sign = async () => {
             */
             considerationToken: '0x0000000000000000000000000000000000000000',
             considerationIdentifier: 0,
-            //considerationAmount: ethers.utils.parseEther('32375000000000000'),
+            considerationAmount: '9750000000000000',
 
-            offerer: '0xF6d47763f157f42E8BD711A3B41510267eaF4ba1',
-            zone: '0x004C00500000aD104D7DBd00e3ae0A5C00560C00',
-            offerToken: '0x86eF335CB0ADA3c681Ec4240Ef6520c407ADEb0b',
-            offerIdentifier: 9489,
+            offerToken: '0x23774Ea0CA2469b569511C514dA5fEcDd64319fF',
+            offerIdentifier: 2,
             offerAmount: 1,
 
-            basicOrderType: 2,
-            startTime: 1668549660,
-            endTime: 1669154460,
+            offerer: '0xdd305DCf8C019B2E89cCEcfeDD80093726F611EF',
+            zone: '0x0000000000000000000000000000000000000000',
+
+
+            basicOrderType: 0,
+            startTime: 1669016017,
+            endTime: 1671608017,
             zoneHash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            //salt: '24446860302761739304752683030156737591518664810215442929804101501498965266830',
+            salt: '24446860302761739304752683030156737591518664810215442929803619960689293281935',
 
             offererConduitKey: '0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000',
             fulfillerConduitKey: '0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000',
-            totalOriginalAdditionalRecipients: 2,
-            //additionalRecipients: [875000000000000, '0x0000a26b00c1F0DF003000390027140000fAa719', 1750000000000000, '0x9E51954aaf1d8A73Fa1E78DC55fe8637fcf805Cf']
+            totalOriginalAdditionalRecipients: 1,
+            additionalRecipients: [
+
+                { amount: 250000000000000, address: '0x0000a26b00c1F0DF003000390027140000fAa719' },
+
+            ]
         },
+
+
         primaryType: 'BasicOrderParameters',
         types: {
             // TODO: Clarify if EIP712Domain refers to the domain the contract is hosted on
@@ -177,7 +185,7 @@ export const sign = async () => {
             BasicOrderParameters: [
                 { name: 'considerationToken', type: "address" },
                 { name: 'considerationIdentifier', type: "uint256" },
-                // { name: 'considerationAmount', type: "uint256" },
+                { name: 'considerationAmount', type: "uint256" },
                 { name: 'offerer', type: "address" },
                 { name: 'zone', type: "address" },
                 { name: 'offerToken', type: "address" },
@@ -187,29 +195,41 @@ export const sign = async () => {
                 { name: 'startTime', type: "uint256" },
                 { name: 'endTime', type: "uint256" },
                 { name: 'zoneHash', type: "bytes32" },
-                // { name: 'salt', type: "uint256" },
+                { name: 'salt', type: "uint256" },
                 { name: 'offererConduitKey', type: "bytes32" },
                 { name: 'fulfillerConduitKey', type: "bytes32" },
                 { name: 'totalOriginalAdditionalRecipients', type: "uint256" },
-                //{ name: 'additionalRecipients', type: 'Recipient[]' }
+                { name: 'additionalRecipients', type: 'Recipient[]' }
             ],
 
-            Recipient: [
-                { name: 'amount', type: 'uint256' },
-                { name: 'address', type: 'address' },
-            ],
-        },
+            Recipient:
+                [
+                    { name: 'amount', type: 'uint256' },
+                    { name: 'address', type: 'address' },
+                ]
 
+
+
+        }
     });
 
     await ethereum.request({ method: 'eth_requestAccounts' })
 
-    const response = await ethereum.request({
-        method: 'eth_signTypedData_v4',
-        params: [ethereum.selectedAddress, msgParams]
-    });
+    try {
 
-    return response
+        const response = await ethereum.request({
+            method: 'eth_signTypedData_v4',
+            params: [ethereum.selectedAddress, msgParams]
+        });
+
+        return response
+
+    } catch (error) {
+        console.error(error)
+        console.log(error)
+    }
+
+
 }
 
 
