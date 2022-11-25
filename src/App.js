@@ -1,31 +1,33 @@
 
 import { useState } from 'react';
-import { getName, sign } from './seaport'
-import { createOrder } from "./seaport-js"
+import { createOrder, approval, fulfillOrder } from "./seaport"
+import { ownerAssets } from "./sea"
 
 function App() {
 
   const [name, setName] = useState('')
   const [signature, setSign] = useState('')
-  const [order, setOrder] = useState()
+
 
   const displayName = async () => {
     setName('')
-    setName(await getName())
+    //setName(await getName())
+
+  }
+
+  const getApproval = async () => {
+    //await approval()
+    //await ownerAssets()
 
   }
 
   const displaySign = async () => {
     setSign('')
-    await setSign(await sign())
-    console.log(signature)
-  }
-
-  const displayOrder = async () => {
-    setOrder('')
-    setOrder(await createOrder())
+    let orderNsign = await createOrder()
+    setSign(orderNsign.signature)
 
   }
+
 
   return (
     <div className='container-fluid'>
@@ -33,14 +35,20 @@ function App() {
         <h1>seaport Interactions</h1>
       </div>
       <div className='d-flex align-items-center mt-3'>
-        <button className='className="btn bg-success rounded-2 py-0 w-md  d-none d-md-inline'
-          onClick={displayName}>Get Name</button>
+        <button className='btn bg-success rounded-2 py-0 w-md  d-none d-md-inline'
+          onClick={getApproval}>approve</button>
         <p className='ms-2'>{name}</p>
       </div>
       <div className='d-flex align-items-center mt-3'>
-        <button className='className="btn bg-success rounded-2 py-0 w-md  d-none d-md-inline'
-          onClick={displayOrder}>sign</button>
+        <button className='btn bg-success  rounded-2 py-0 w-md  d-none d-md-inline'
+          onClick={displaySign}>Create Order</button>
         <p className='ms-2'>{signature}</p>
+      </div>
+
+      <div className='d-flex align-items-center mt-3'>
+        <button className='btn bg-success  rounded-2 py-0 w-md  d-none d-md-inline'
+          onClick={fulfillOrder}>fulfill Order</button>
+        <p className='ms-2'></p>
       </div>
 
     </div>

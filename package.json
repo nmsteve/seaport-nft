@@ -10,11 +10,15 @@
     "@testing-library/user-event": "^13.5.0",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
+    "fs": "^0.0.1-security",
+    "generate-pincode": "^6.0.0",
+    "node": "^19.1.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "seaport": "^2.0.9",
+    "seaport-js": "^1.2.0",
     "web-vitals": "^2.1.4",
     "web3": "^1.8.1",
     "web3-wallets": "^2.4.1"
@@ -42,5 +46,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "webpack": "^5.75.0"
   }
 }
